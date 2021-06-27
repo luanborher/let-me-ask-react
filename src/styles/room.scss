@@ -4,7 +4,7 @@
     border-bottom: 1px solid #e2e2e2;
 
     .content {
-      max-width: 1128px;
+      max-width: 1120px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -35,7 +35,7 @@
       align-items: center;
 
       h1 {
-        font-family: arial, sans-serif;
+        font-family: 'Poppins', sans-serif;
         font-size: 24px;
         color: #29292e;
       }
@@ -45,7 +45,7 @@
         background: #e559f9;
         border-radius: 9999px;
         padding: 8px 16px;
-        color: #fff;
+        color: #FFF;
         font-weight: 500;
         font-size: 14px;
       }
@@ -89,13 +89,13 @@
 
         > span {
           font-size: 14px;
-          color: #737388;
+          color: #737380;
           font-weight: 500;
 
           button {
             background: transparent;
             border: 0;
-            color: #835afd;
+            color: #835AFD;
             text-decoration: underline;
             font-size: 14px;
             font-weight: 500;

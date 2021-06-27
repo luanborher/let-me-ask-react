@@ -1,51 +1,41 @@
-import '../styles/room.scss'
+import { useHistory, useParams } from 'react-router-dom'
 
-import { FormEvent, useState } from 'react'
+import logoImg from '../assets/images/logo.svg';
+import deleteImg from '../assets/images/delete.svg';
 
-import { Button } from '../components/Button'
-import { Question } from '../components/Question'
-import { RoomCode } from '../components/RoomCode'
-import { database } from '../services/firebase'
-import logoImg from '../assets/images/logo.svg' 
-import { useAuth } from '../hooks/useAuth'
-import { useParams } from 'react-router-dom'
-import { useRoom } from '../hooks/useRoom'
+import { Button } from '../components/Button';
+import { Question } from '../components/Question';
+import { RoomCode } from '../components/RoomCode';
+// import { useAuth } from '../hooks/useAuth';
+import { useRoom } from '../hooks/useRoom';
+import { database } from '../services/firebase';
+
+import '../styles/room.scss';
 
 type RoomParams = {
-  id: string
+  id: string;
 }
 
-export const AdminRoom = () => {
-  const { user } = useAuth()
-  const params = useParams<RoomParams>()
-  const roomId = params.id
-  const [newQuestion, setNewQuestion] = useState('')
-  const { questions, title } = useRoom(roomId)
+export function AdminRoom() {
+  // const { user } = useAuth();
+  const history = useHistory()
+  const params = useParams<RoomParams>();
+  const roomId = params.id;
 
-  const handleSendQuestion = async (event: FormEvent) => {
-    event.preventDefault()
+  const { title, questions } = useRoom(roomId)
 
-    if (newQuestion.trim() === '') {
-      return
+  async function handleEndRoom() {
+    await database.ref(`rooms/${roomId}`).update({
+      endedAt: new Date(),
+    })
+
+    history.push('/');
+  }
+
+  async function handleDeleteQuestion(questionId: string) {
+    if (window.confirm('Tem certeza que você deseja excluir esta pergunta?')) {
+      await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
     }
-
-    if (!user) {
-      throw new Error('You must be loggd in')
-    }
-
-    const question = {
-      content: newQuestion,
-      author: {
-        name: user.name,
-        avatar: user.avatar,
-      },
-      isHighLighted: false,
-      isAnswered: false,
-    }
-
-    await database.ref(`rooms/${roomId}/questions`).push(question)
-
-    setNewQuestion('')
   }
 
   return (
@@ -53,51 +43,38 @@ export const AdminRoom = () => {
       <header>
         <div className="content">
           <img src={logoImg} alt="Letmeask" />
-          <RoomCode code={roomId} />
+          <div>
+            <RoomCode code={roomId} />
+            <Button isOutlined onClick={handleEndRoom}>Encerrar sala</Button>
+          </div>
         </div>
       </header>
 
-      <main className="content">
+      <main>
         <div className="room-title">
           <h1>Sala {title}</h1>
-          {questions.length > 0 && <span>{questions.length} Pergunta(s)</span>}
+          { questions.length > 0 && <span>{questions.length} pergunta(s)</span> }
         </div>
 
-        <form onSubmit={handleSendQuestion}>
-          <textarea
-            placeholder="O que você quer perguntar?"
-            onChange={(event) => setNewQuestion(event.target.value)}
-            value={newQuestion}
-          />
-
-          <div className="form-footer">
-            {user ? (
-              <div className="user-info">
-                <img src={user.avatar} alt={user.name} />
-                <span>{user.name}</span>
-              </div>
-            ) : (
-              <span>
-                Para enviar uma pergunta, <button>faça seu login</button>.
-              </span>
-            )}
-            <Button type="submit" disabled={!user}>
-              Enviar pergunta
-            </Button>
-          </div>
-        </form>
         <div className="question-list">
-          {questions.map((question) => {
+          {questions.map(question => {
             return (
               <Question
                 key={question.id}
                 content={question.content}
                 author={question.author}
-              />
-            )
+              >
+                <button
+                  type="button"
+                  onClick={() => handleDeleteQuestion(question.id)}
+                >
+                  <img src={deleteImg} alt="Remover pergunta" />
+                </button>
+              </Question>
+            );
           })}
         </div>
       </main>
     </div>
-  )
+  );
 }
