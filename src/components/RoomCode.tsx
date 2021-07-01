@@ -1,10 +1,10 @@
-import copyImg from '../assets/images/copy.svg';
+import '../styles/room-code.scss'
 
-import '../styles/room-code.scss';
+import copyImg from '../assets/images/copy.svg'
 
 type RoomCodeProps = {
-  code: string;
-} 
+  code: string
+}
 
 export function RoomCode(props: RoomCodeProps) {
   function copyRoomCodeToClipboard() {

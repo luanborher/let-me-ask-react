@@ -7,12 +7,12 @@
     flex: 7;
 
     background: #835afd;
-    color: #FFF;
+    color: #fff;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
+
     padding: 120px 80px;
 
     img {
@@ -66,15 +66,16 @@
         height: 50px;
         border-radius: 8px;
         padding: 0 16px;
-        background: #FFF;
+        background: #fff;
         border: 1px solid #a8a8b3;
       }
 
-      button { 
+      button {
         margin-top: 16px;
       }
 
-      button, input {
+      button,
+      input {
         width: 100%;
       }
     }
@@ -96,7 +97,7 @@
     border-radius: 8px;
     font-weight: 500;
     background: #ea4335;
-    color: #FFF;
+    color: #fff;
 
     display: flex;
     justify-content: center;

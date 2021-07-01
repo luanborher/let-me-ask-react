@@ -1,0 +1,21 @@
+#footer {
+  margin-top: 5vh;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5vh;
+  align-items: center;
+
+  p {
+    font-family: arial, sans-serif;
+    color: #3d3d3d;
+    font-size: 14px;
+  }
+
+  .icone {
+    font-size: 25pt;
+    color: #835afd;
+    display: flex;
+  }
+}

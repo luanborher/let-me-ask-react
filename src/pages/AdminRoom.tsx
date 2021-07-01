@@ -1,28 +1,27 @@
+import '../styles/room.scss'
+
 import { useHistory, useParams } from 'react-router-dom'
 
-import logoImg from '../assets/images/logo.svg';
-import deleteImg from '../assets/images/delete.svg';
-import checkImg from '../assets/images/check.svg';
-import answerImg from '../assets/images/answer.svg';
-
-import { Button } from '../components/Button';
-import { Question } from '../components/Question';
-import { RoomCode } from '../components/RoomCode';
-// import { useAuth } from '../hooks/useAuth';
-import { useRoom } from '../hooks/useRoom';
-import { database } from '../services/firebase';
-
-import '../styles/room.scss';
+import { AiOutlineEdit } from 'react-icons/ai'
+import { Button } from '../components/Button'
+import { Question } from '../components/Question'
+import { RoomCode } from '../components/RoomCode'
+import answerImg from '../assets/images/answer.svg'
+import checkImg from '../assets/images/check.svg'
+import { database } from '../services/firebase'
+import deleteImg from '../assets/images/delete.svg'
+import logoImg from '../assets/images/logo.svg'
+import { useRoom } from '../hooks/useRoom'
 
 type RoomParams = {
-  id: string;
+  id: string
 }
 
 export function AdminRoom() {
   // const { user } = useAuth();
   const history = useHistory()
-  const params = useParams<RoomParams>();
-  const roomId = params.id;
+  const params = useParams<RoomParams>()
+  const roomId = params.id
 
   const { title, questions } = useRoom(roomId)
 
@@ -31,12 +30,12 @@ export function AdminRoom() {
       endedAt: new Date(),
     })
 
-    history.push('/');
+    history.push('/')
   }
 
   async function handleDeleteQuestion(questionId: string) {
     if (window.confirm('Tem certeza que você deseja excluir esta pergunta?')) {
-      await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
+      await database.ref(`rooms/${roomId}/questions/${questionId}`).remove()
     }
   }
 
@@ -52,14 +51,31 @@ export function AdminRoom() {
     })
   }
 
+  async function handleUpdateRenameRoom(newRoomName: string) {
+    await database.ref(`rooms/${roomId}`).update({
+      title: newRoomName,
+    })
+  }
+
+  const renameRoom = () => {
+    let val = window.prompt('Digite um Nome Novo para a Sala', title) as string
+    handleUpdateRenameRoom(val)
+  }
+
+  const handleViewerRoom = () => {
+    history.push(`/rooms/${roomId}`)
+  }
+
   return (
     <div id="page-room">
       <header>
         <div className="content">
           <img src={logoImg} alt="Letmeask" />
+
           <div>
+            <Button onClick={handleViewerRoom}>Espectador</Button>
             <RoomCode code={roomId} />
-            <Button isOutlined onClick={handleEndRoom}>Encerrar sala</Button>
+            <Button onClick={handleEndRoom}>Encerrar sala</Button>
           </div>
         </div>
       </header>
@@ -67,11 +83,14 @@ export function AdminRoom() {
       <main>
         <div className="room-title">
           <h1>Sala {title}</h1>
-          { questions.length > 0 && <span>{questions.length} pergunta(s)</span> }
+          {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
+          <button type="button" onClick={renameRoom}>
+            <AiOutlineEdit />
+          </button>
         </div>
 
         <div className="question-list">
-          {questions.map(question => {
+          {questions.map((question) => {
             return (
               <Question
                 key={question.id}
@@ -86,7 +105,10 @@ export function AdminRoom() {
                       type="button"
                       onClick={() => handleCheckQuestionAsAnswered(question.id)}
                     >
-                      <img src={checkImg} alt="Marcar pergunta como respondida" />
+                      <img
+                        src={checkImg}
+                        alt="Marcar pergunta como respondida"
+                      />
                     </button>
                     <button
                       type="button"
@@ -103,10 +125,10 @@ export function AdminRoom() {
                   <img src={deleteImg} alt="Remover pergunta" />
                 </button>
               </Question>
-            );
+            )
           })}
         </div>
       </main>
     </div>
-  );
+  )
 }

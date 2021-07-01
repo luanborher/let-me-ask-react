@@ -1,3 +1,8 @@
+@import 'variables';
+.Overlay {
+  background: #000;
+}
+
 #page-room {
   header {
     padding: 24px;
@@ -14,12 +19,23 @@
         max-height: 45px;
       }
 
+      .button-admin {
+        &:hover {
+          background: #cfbfff;
+          color: #fff;
+          cursor: pointer;
+        }
+      }
+
       > div {
         display: flex;
         gap: 16px;
 
         button {
           height: 40px;
+          border: 1px solid #835afd;
+          color: #835afd;
+          background: #fff;
         }
       }
     }
@@ -33,6 +49,7 @@
       margin: 32px 0 24px;
       display: flex;
       align-items: center;
+      gap: 8px;
 
       h1 {
         font-family: 'Poppins', sans-serif;
@@ -45,9 +62,18 @@
         background: #e559f9;
         border-radius: 9999px;
         padding: 8px 16px;
-        color: #FFF;
+        color: #fff;
         font-weight: 500;
         font-size: 14px;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        font-size: 26px;
+        border: 0;
+        color: #835afd;
+        background: $main-bg;
       }
     }
 
@@ -57,7 +83,7 @@
         border: 0;
         padding: 16px;
         border-radius: 8px;
-        background: #fefefe;
+        background: $main-bg;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
         resize: vertical;
         min-height: 130px;
@@ -95,7 +121,7 @@
           button {
             background: transparent;
             border: 0;
-            color: #835AFD;
+            color: #835afd;
             text-decoration: underline;
             font-size: 14px;
             font-weight: 500;
